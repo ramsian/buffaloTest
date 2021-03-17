@@ -9,6 +9,7 @@ import (
 	"github.com/unrolled/secure"
 
 	contenttype "github.com/gobuffalo/mw-contenttype"
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gobuffalo/x/sessions"
 	"github.com/rs/cors"
 )
@@ -46,6 +47,9 @@ func App() *buffalo.App {
 		// Automatically redirect to SSL
 		app.Use(forceSSL())
 
+		// Initialize database
+		ConnectDatabase()
+
 		// Log request parameters (filters apply).
 		app.Use(paramlogger.ParameterLogger)
 
@@ -53,6 +57,7 @@ func App() *buffalo.App {
 		app.Use(contenttype.Set("application/json"))
 
 		app.GET("/", HomeHandler)
+		app.GET("/createHealthData", CreateHealthHandler)
 	}
 
 	return app
